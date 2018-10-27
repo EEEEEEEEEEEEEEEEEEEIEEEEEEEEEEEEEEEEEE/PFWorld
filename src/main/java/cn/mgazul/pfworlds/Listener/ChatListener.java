@@ -17,7 +17,7 @@ public class ChatListener implements Listener{
         if (cmdWorld.worldInfo.contains(p)) {
             event.setCancelled(true);
             Config.addInfo(ClickEvent.changeInfo, event.getMessage());
-            p.sendMessage(Main.getInstance().getPrefix() + "已添加信息§b " + event.getMessage() + "§7 到配置文件.");
+            p.sendMessage(Main.prefix  + "已添加信息§b " + event.getMessage() + "§7 到配置文件.");
             cmdWorld.worldInfo.remove(p);
         }
     }

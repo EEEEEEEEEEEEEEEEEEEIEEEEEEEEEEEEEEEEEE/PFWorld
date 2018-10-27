@@ -28,8 +28,8 @@ public class ClickEvent implements Listener{
         final WorldType worldType = WorldType.getByName(event.getCurrentItem().getItemMeta().getDisplayName());
         if (worldType != null) {
             if (WorldTypes.WorldTypes.contains(worldType)) {
-            	final World w = Bukkit.createWorld(new WorldCreator(Main.getInstance().getCommandName()).type(worldType));
-                p.teleport(Bukkit.getWorld(Main.getInstance().getCommandName()).getSpawnLocation());
+            	final World w = Bukkit.createWorld(new WorldCreator(Main.instance.getCommandName()).type(worldType));
+                p.teleport(Bukkit.getWorld(Main.instance.getCommandName()).getSpawnLocation());
                 try {
                     Config.addWorld(w.getName());
                 }
@@ -40,7 +40,7 @@ public class ClickEvent implements Listener{
             }
         }
         else {
-            p.sendMessage(Main.getInstance().getPrefix() + "§c无法找到此WorldType.");
+            p.sendMessage(Main.prefix  + "§c无法找到此WorldType.");
         }
     }
     
@@ -57,7 +57,7 @@ public class ClickEvent implements Listener{
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
-                    p.sendMessage(Main.getInstance().getPrefix() + "发生了未知错误. ");
+                    p.sendMessage(Main.prefix  + "发生了未知错误. ");
                 }
             }
             else if (event.getInventory().getTitle().equals("§8》 §6世界")) {

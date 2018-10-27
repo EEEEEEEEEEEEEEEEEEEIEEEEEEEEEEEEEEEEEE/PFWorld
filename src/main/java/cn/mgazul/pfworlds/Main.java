@@ -12,14 +12,11 @@ import cn.mgazul.pfworlds.utilities.PFPapiHook;
 import cn.mgazul.pfworlds.utilities.WorldTypes;
 
 public class Main extends JavaPlugin{
-	
-    static Main instance;
-    public static Main getInstance() {
-        return Main.instance;
-    }
-    private String prefix = "§6世界管理 §8》 §7";
-    
-    private String type;
+
+    public static Main instance;
+    public static String prefix = "§6世界管理 §8》 §7";
+
+    public String type;
     
     public void addWorldType() {
         WorldTypes.WorldTypes.add(WorldType.FLAT);
