@@ -17,7 +17,7 @@ public class Main extends JavaPlugin{
     public static Main getInstance() {
         return Main.instance;
     }
-    private String prefix;
+    private String prefix = "§6世界管理 §8》 §7";
     
     private String type;
     
@@ -42,8 +42,8 @@ public class Main extends JavaPlugin{
     }
     
     public void onEnable() {
-        this.setPrefix("§6世界管理 §8》 §7");
         this.registerEvents();
+        loadConfig();
         this.addWorldType();
         Main.instance = this;
         Config.createFile();
@@ -70,9 +70,5 @@ public class Main extends JavaPlugin{
     
     public void setCommandName(String type) {
         this.type = type;
-    }
-    
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
     }
 }
