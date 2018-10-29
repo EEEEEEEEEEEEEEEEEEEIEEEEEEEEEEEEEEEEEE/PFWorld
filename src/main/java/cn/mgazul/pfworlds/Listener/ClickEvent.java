@@ -1,19 +1,14 @@
 package cn.mgazul.pfworlds.Listener;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import cn.mgazul.pfworlds.Commands.cmdWorld;
+import cn.mgazul.pfworlds.Main;
+import cn.mgazul.pfworlds.utilities.Config;
+import cn.mgazul.pfworlds.utilities.WorldTypes;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-
-import cn.mgazul.pfworlds.Main;
-import cn.mgazul.pfworlds.Commands.cmdWorld;
-import cn.mgazul.pfworlds.utilities.Config;
-import cn.mgazul.pfworlds.utilities.WorldTypes;
 
 public class ClickEvent implements Listener{
     static ClickEvent intsanz;

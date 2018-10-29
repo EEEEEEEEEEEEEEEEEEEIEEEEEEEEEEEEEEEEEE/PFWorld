@@ -1,8 +1,8 @@
 package cn.mgazul.pfworlds.utilities;
 
-import java.util.ArrayList;
-
 import org.bukkit.WorldType;
+
+import java.util.ArrayList;
 
 public class WorldTypes
 {

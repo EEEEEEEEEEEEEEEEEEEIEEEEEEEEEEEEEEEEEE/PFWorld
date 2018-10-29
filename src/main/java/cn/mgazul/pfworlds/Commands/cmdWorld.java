@@ -1,13 +1,10 @@
 package cn.mgazul.pfworlds.Commands;
 
-import java.io.File;
-import java.util.ArrayList;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import cn.mgazul.pfworlds.Main;
+import cn.mgazul.pfworlds.utilities.Config;
+import cn.mgazul.pfworlds.utilities.WorldTypes;
+import cn.mgazul.pfworlds.utilities.itemAPI;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,11 +13,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import cn.mgazul.pfworlds.Main;
-import cn.mgazul.pfworlds.Listener.ClickEvent;
-import cn.mgazul.pfworlds.utilities.Config;
-import cn.mgazul.pfworlds.utilities.WorldTypes;
-import cn.mgazul.pfworlds.utilities.itemAPI;
+import java.io.File;
+import java.util.ArrayList;
 
 public class cmdWorld implements CommandExecutor{
 
