@@ -139,24 +139,23 @@ public class cmdWorld implements CommandExecutor{
                     }
              //加载世界
             if (args.length == 2 &&args[0].equalsIgnoreCase("import")) {
-                        try {
-                            final World w = Bukkit.getWorld(args[1]);
-                            p.teleport(w.getSpawnLocation());
-                            p.sendMessage(Main.prefix + "这个世界已经存在。 已将你传送.");
-                        }
-                        catch (Exception e3) {
-                            final File loadWorld = new File(args[1]);
-                            if (loadWorld.exists()) {
-                                p.sendMessage(Main.prefix + "加载世界中.");
-                                final World w2 = Bukkit.createWorld(new WorldCreator(args[1]).type(WorldType.FLAT));
-                                p.teleport(w2.getSpawnLocation());
-                                Config.addWorld(w2.getName());
-                                p.sendMessage(Main.prefix + "这个世界已被加载。已将你传送.");
-                            }
-                            else {
-                                p.sendMessage(Main.prefix + "找不到你要加载的世界文件.");
-                            }
-                        }
+                try {
+                    final World w = Bukkit.getWorld(args[1]);
+                    p.teleport(w.getSpawnLocation());
+                    p.sendMessage(Main.prefix + "这个世界已经存在。 已将你传送.");
+                }
+                catch (Exception e3) {
+                    final File loadWorld = new File(args[1]);
+                    if (loadWorld.exists()) {
+                        p.sendMessage(Main.prefix + "加载世界中.");
+                        final World w2 = Bukkit.createWorld(new WorldCreator(args[1]).type(WorldType.FLAT));
+                        p.teleport(w2.getSpawnLocation());
+                        Config.addWorld(w2.getName());
+                        p.sendMessage(Main.prefix + "这个世界已被加载。已将你传送.");
+                    } else {
+                        p.sendMessage(Main.prefix + "找不到你要加载的世界文件.");
+                    }
+                }
             }
             //卸载世界
             if (args.length == 2 &&args[0].equalsIgnoreCase("unload")) {
@@ -185,12 +184,9 @@ public class cmdWorld implements CommandExecutor{
                 cmdWorld.worldInfo.add(p);
             }
 
-            if (args.length == 3 && args[0].equalsIgnoreCase("setname")) {
-                if (Bukkit.getWorld(args[1]) == null) {
-                    return true;
-                }
-                String worldname = args[1];
-                String name = args[2];
+            if (args.length == 2 && args[0].equalsIgnoreCase("setname")) {
+                String worldname = p.getWorld().getName();
+                String name = args[1];
                 Config.addname(worldname, name);
                 p.sendMessage(Main.prefix + "§c成功设置别名:"+name);
             }
@@ -205,7 +201,7 @@ public class cmdWorld implements CommandExecutor{
         p.sendMessage(Main.prefix + "/world import <Name> 加载世界");
         p.sendMessage(Main.prefix + "/world unload <Name> 卸载世界");
         p.sendMessage(Main.prefix + "/world addinfo <Name> 添加世界介绍");
-        p.sendMessage(Main.prefix + "/world setname <Name> 添加世界别名");
+        p.sendMessage(Main.prefix + "/world setname <Name> 添加当前世界别名");
         p.sendMessage(Main.prefix + "/world list  世界列表GUI");
         p.sendMessage(" ");
     }
