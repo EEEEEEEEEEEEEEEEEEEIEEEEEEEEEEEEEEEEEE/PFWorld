@@ -139,9 +139,6 @@ public class Config
                 try {
                     cfg.load(Config.f);
                     if (cfg.getString("worlds." + world.getName()) != null) {
-                        cfg.set("worlds." + world.getName() + ".seed", null);
-                        cfg.set("worlds." + world.getName() + ".worldtype", null);
-                        cfg.set("worlds." + world.getName() + ".environment", null);
                         cfg.set("worlds." + world.getName(), null);
                     }
                     cfg.save(Config.f);

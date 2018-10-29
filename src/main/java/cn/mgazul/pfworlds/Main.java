@@ -28,7 +28,6 @@ public class Main extends JavaPlugin{
     }
     
     public void loadConfig() {
-        this.getConfig().set("PFWorlds", null);
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
     }
