@@ -28,10 +28,6 @@ public class Main extends JavaPlugin{
         return this.type;
     }
     
-    public String getPrefix() {
-        return this.prefix;
-    }
-    
     public void loadConfig() {
         this.getConfig().set("PFWorlds", null);
         this.getConfig().options().copyDefaults(true);

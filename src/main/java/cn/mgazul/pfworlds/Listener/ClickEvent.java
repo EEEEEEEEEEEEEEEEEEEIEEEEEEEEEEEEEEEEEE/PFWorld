@@ -72,7 +72,7 @@ public class ClickEvent implements Listener{
                         p.teleport(Bukkit.getWorld(splitted[1]).getSpawnLocation());
                     }
                     else {
-                        cmdWorld.worldNotExists(p);
+                        cmdWorld.worldNotExists(p, splitted[1]);
                     }
                 }
                 else if (event.getCurrentItem().getItemMeta().getDisplayName().equals("§4§l关闭菜单")) {

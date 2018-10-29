@@ -54,6 +54,7 @@ public class cmdWorld implements CommandExecutor{
                     }
                     infoLore.add("§b世界别名 §8》 §7" + name1);
                     infoLore.add("§b信息 §8》 §7" + infos);
+                    infoLore.add("§b世界边界 §8》 §7" + String.valueOf(w.getWorldBorder().getSize()));
                     infoLore.add("§b世界类型 §8》 §7" + worldtype);
                 }
             }
@@ -68,50 +69,51 @@ public class cmdWorld implements CommandExecutor{
         p.openInventory(inv);
     }
     
-    public static void worldNotExists(final Player p) {
-        p.sendMessage(Main.prefix + "这个世界不存在。 可以通过§6/world list§7看到现有的世界!");
+    public static void worldNotExists(final Player p, String world) {
+        p.sendMessage(Main.prefix + "这个世界<"+ world +">不存在。 可以通过§6/world list§7看到现有的世界!");
+    }
+
+    public static void worldAllExists(final Player p, String world) {
+        p.sendMessage(Main.prefix + "这个世界<"+ world +">已存在。 可以通过§6/world list§7看到现有的世界!");
     }
     
     public boolean onCommand(final CommandSender cs, final Command cmd, final String label, final String[] args) {
         if (cs instanceof Player) {
-            final Player p = (Player)cs;
-            if (p.isOp()) {
-                if (args.length == 0) {
-                    this.sendHelp(p);
+            Player p = (Player)cs;
+            if (args.length == 0) {
+                this.sendHelp(p);
+            }
+            //世界列表
+            if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
+                openWorldGui(p, "§8》 §6世界");
+            }
+            //创建世界
+            if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
+                if (Bukkit.getWorld(args[1]) == null) {
+                    Main.instance.setCommandName(args[1]);
+                    int i = -1;
+                    final Inventory inv = Bukkit.createInventory(null, 27, "§7世界名§8: §c" + args[1]);
+                    for (WorldType worldType : WorldTypes.WorldTypes) {
+                        i++;
+                        inv.setItem(i, itemAPI.doItem(Material.MAP, 1, worldType.getName(), null));
+                    }
+                    p.openInventory(inv);
+                } else {
+                    worldAllExists(p, args[1]);
                 }
-                else if (args.length == 1) {
-                    if (args[0].equalsIgnoreCase("list")) {
-                        openWorldGui(p, "§8》 §6世界");
-                    }
-                    else {
-                        this.sendHelp(p);
-                    }
+            }
+            //传送到世界
+            if (args.length == 2 && args[0].equalsIgnoreCase("tp")) {
+                World world = Bukkit.getWorld(args[1]);
+                if (world == null) {
+                    worldNotExists(p,args[1]);
+                    return true;
                 }
-                else if (args.length == 2) {
-                    if (args[0].equalsIgnoreCase("create")) {
-                        if (Bukkit.getWorld(args[1]) == null) {
-                            Main.instance.setCommandName(args[1]);
-                            int i = -1;
-                            final Inventory inv = Bukkit.createInventory(null, 27, "§7世界名§8: §c" + args[1]);
-                            for (WorldType worldType : WorldTypes.WorldTypes) {
-                                ++i;
-                                inv.setItem(i, itemAPI.doItem(Material.MAP, 1, worldType.getName(), null));
-                            }
-                            p.openInventory(inv);
-                        }
-                        else {
-                            this.worldAlreadyExists(p);
-                        }
-                    }
-                    else if (args[0].equalsIgnoreCase("tp")) {
-                        if (Bukkit.getWorld(args[1]) != null) {
-                            p.teleport(Bukkit.getWorld(args[1]).getSpawnLocation());
-                            p.sendMessage(Main.prefix + "已传送到世界§6 " + args[1] + " §7的出生点.");
-                        } else {
-                            worldNotExists(p);
-                        }
-                    }
-                    else if (args[0].equalsIgnoreCase("delete")) {
+                p.teleport(Bukkit.getWorld(args[1]).getSpawnLocation());
+                p.sendMessage(Main.prefix + "已传送到世界§6 " + args[1] + " §7的出生点.");
+            }
+            //删除世界
+            if (args.length == 2 &&args[0].equalsIgnoreCase("delete")) {
                         if (!args[1].equalsIgnoreCase("world")) {
                             final World w = Bukkit.getWorld(args[1]);
                             if (w != null) {
@@ -135,7 +137,8 @@ public class cmdWorld implements CommandExecutor{
                             p.sendMessage(Main.prefix + "§c你无法删除这个世界!");
                         }
                     }
-                    else if (args[0].equalsIgnoreCase("import")) {
+             //加载世界
+            if (args.length == 2 &&args[0].equalsIgnoreCase("import")) {
                         try {
                             final World w = Bukkit.getWorld(args[1]);
                             p.teleport(w.getSpawnLocation());
@@ -154,61 +157,42 @@ public class cmdWorld implements CommandExecutor{
                                 p.sendMessage(Main.prefix + "找不到你要加载的世界文件.");
                             }
                         }
-                    }
-                    else if (args[0].equalsIgnoreCase("unload")) {
-                        if (Bukkit.getWorld(args[1]) != null) {
-                            for (final Player all2 : Bukkit.getOnlinePlayers()) {
-                                if (all2.getWorld() == Bukkit.getWorld(args[1])) {
-                                    all2.teleport(Bukkit.getWorld("world").getSpawnLocation());
-                                }
-                            }
-                            Bukkit.unloadWorld(Bukkit.getWorld(args[1]), true);
-                            Config.removeWorld(args[1]);
-                        }
-                    }
-                    else if (args[0].equalsIgnoreCase("addinfo")) {
-                        final World w = Bukkit.getWorld(args[1]);
-                        if (w != null) {
-                            p.sendMessage(Main.prefix + "您现在正在编辑世界的信息 §b§l" + w.getName() + "§7.");
-                            p.sendMessage(Main.prefix + "现在在聊天中写下地图信息.");
-                            ClickEvent.changeInfo = args[1];
-                            cmdWorld.worldInfo.add(p);
-                        }
-                        else {
-                            worldNotExists(p);
-                        }
+            }
+            //卸载世界
+            if (args.length == 2 &&args[0].equalsIgnoreCase("unload")) {
+                if (Bukkit.getWorld(args[1]) != null) {
+                    return true;
+                }
+                for (final Player all2 : Bukkit.getOnlinePlayers()) {
+                    if (all2.getWorld() == Bukkit.getWorld(args[1])) {
+                        all2.teleport(Bukkit.getWorld("world").getSpawnLocation());
                     }
                 }
-                else if (args.length == 3 && args[0].equalsIgnoreCase("create")) {
-                    final String worldname = args[1];
-                    if (Bukkit.getWorld(args[1]) == null) {
-                        final WorldType worldType2 = WorldType.getByName(args[2]);
-                        p.sendMessage(Main.prefix + "\u00dcberpr\u00fcfe WorldType§6 " + args[2]);
-                        if (worldType2 != null) {
-                            if (worldType2 != WorldType.CUSTOMIZED) {
-                                p.sendMessage(Main.prefix + "§aWorldType正确.");
-                                p.sendMessage(Main.prefix + "世界§c " + worldname + " §7已创建. §8(§7" + args[2] + "§8)");
-                                final World welt = Bukkit.createWorld(new WorldCreator(worldname).type(WorldType.getByName(args[2])));
-                                try {
-                                    Config.addWorld(welt.getName());
-                                }
-                                catch (Exception e) {
-                                    e.printStackTrace();
-                                    p.sendMessage("无法创建世界.");
-                                }
-                                p.teleport(Bukkit.getWorld(worldname).getSpawnLocation());
-                            } else {
-                                p.sendMessage(Main.prefix + "世界类型§6 " + worldType2.toString() + " §7目前不支持\u00fctzt.");
-                            }
-                        }
-                        else {
-                            p.sendMessage(Main.prefix + "§c无法找到此 WorldType.");
-                        }
-                    }
-                    else {
-                        this.worldAlreadyExists(p);
-                    }
+                Bukkit.unloadWorld(Bukkit.getWorld(args[1]), true);
+                Config.removeWorld(args[1]);
+                p.sendMessage(Main.prefix + "§c卸载成功");
+            }
+            //添加世界介绍
+            if (args.length == 2 &&args[0].equalsIgnoreCase("addinfo")) {
+                final World w = Bukkit.getWorld(args[1]);
+                if (w != null) {
+                    worldNotExists(p, args[1]);
+                    return true;
                 }
+                p.sendMessage(Main.prefix + "您现在正在编辑世界的信息 §b§l" + w.getName() + "§7.");
+                p.sendMessage(Main.prefix + "现在在聊天中写下地图信息.");
+                ClickEvent.changeInfo = args[1];
+                cmdWorld.worldInfo.add(p);
+            }
+
+            if (args.length == 3 && args[0].equalsIgnoreCase("setname")) {
+                if (Bukkit.getWorld(args[1]) == null) {
+                    return true;
+                }
+                String worldname = args[1];
+                String name = args[2];
+                Config.addname(worldname, name);
+                p.sendMessage(Main.prefix + "§c成功设置别名:"+name);
             }
         }
         return false;
@@ -221,11 +205,8 @@ public class cmdWorld implements CommandExecutor{
         p.sendMessage(Main.prefix + "/world import <Name> 加载世界");
         p.sendMessage(Main.prefix + "/world unload <Name> 卸载世界");
         p.sendMessage(Main.prefix + "/world addinfo <Name> 添加世界介绍");
+        p.sendMessage(Main.prefix + "/world setname <Name> 添加世界别名");
         p.sendMessage(Main.prefix + "/world list  世界列表GUI");
         p.sendMessage(" ");
-    }
-    
-    private void worldAlreadyExists(final Player p) {
-        p.sendMessage(Main.prefix + "这个世界不存在。 可以通过§6/world list§7看到现有的世界!");
     }
 }
