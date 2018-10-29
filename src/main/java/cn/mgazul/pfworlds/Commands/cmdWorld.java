@@ -142,8 +142,7 @@ public class cmdWorld implements CommandExecutor{
                     final World w = Bukkit.getWorld(args[1]);
                     p.teleport(w.getSpawnLocation());
                     p.sendMessage(Main.prefix + "这个世界已经存在。 已将你传送.");
-                }
-                catch (Exception e3) {
+                } catch (Exception e3) {
                     final File loadWorld = new File(args[1]);
                     if (loadWorld.exists()) {
                         p.sendMessage(Main.prefix + "加载世界中.");
@@ -182,6 +181,11 @@ public class cmdWorld implements CommandExecutor{
                 Config.addname(worldname, args[1]);
                 p.sendMessage(Main.prefix + "§c成功设置别名:"+ args[1]);
             }
+            //设置世界出生点
+            if (args.length == 2 && args[0].equalsIgnoreCase("setspawn")) {
+                p.getWorld().setSpawnLocation(p.getLocation());
+                p.sendMessage(Main.prefix + "§c成功设置");
+            }
         }
         return false;
     }
@@ -192,8 +196,9 @@ public class cmdWorld implements CommandExecutor{
         p.sendMessage(Main.prefix + "/world tp <Name> 传送世界");
         p.sendMessage(Main.prefix + "/world import <Name> 加载世界");
         p.sendMessage(Main.prefix + "/world unload <Name> 卸载世界");
-        p.sendMessage(Main.prefix + "/world addinfo <Name> 添加世界介绍");
-        p.sendMessage(Main.prefix + "/world setname <Name> 添加当前世界别名");
+        p.sendMessage(Main.prefix + "/world addinfo <Name> 设置世界介绍");
+        p.sendMessage(Main.prefix + "/world setname <Name> 设置当前世界别名");
+        p.sendMessage(Main.prefix + "/world setspawn 设置世界出生点");
         p.sendMessage(Main.prefix + "/world list  世界列表GUI");
         p.sendMessage(" ");
     }
