@@ -23,16 +23,15 @@ import cn.mgazul.pfworlds.utilities.WorldTypes;
 import cn.mgazul.pfworlds.utilities.itemAPI;
 
 public class cmdWorld implements CommandExecutor{
-	
-    public static ArrayList<Player> worldInfo = new ArrayList<Player>();
+
     public static File f = new File("plugins/PFWorlds/worlds.yml");
     
     
     public static void openWorldGui(final Player p, final String name) {
-        int groesse = 9;
+        int groesse = 54;
         int pos = 0;
         while (Bukkit.getWorlds().size() > groesse) {
-            groesse += 9;
+            groesse += 54;
         }
         final Inventory inv = Bukkit.createInventory(null, groesse, name);
         for (final World w : Bukkit.getWorlds()) {
@@ -53,7 +52,7 @@ public class cmdWorld implements CommandExecutor{
                         name1 = w.getName().toString();
                     }
                     infoLore.add("§b世界别名 §8》 §7" + name1);
-                    infoLore.add("§b信息 §8》 §7" + infos);
+                    infoLore.add("§b信息 §8》 §7" + infos.replace("&", "§"));
                     infoLore.add("§b世界边界 §8》 §7" + String.valueOf(w.getWorldBorder().getSize()));
                     infoLore.add("§b世界类型 §8》 §7" + worldtype);
                 }
@@ -113,7 +112,7 @@ public class cmdWorld implements CommandExecutor{
                 p.sendMessage(Main.prefix + "已传送到世界§6 " + args[1] + " §7的出生点.");
             }
             //删除世界
-            if (args.length == 2 &&args[0].equalsIgnoreCase("delete")) {
+            if (args.length == 2 && args[0].equalsIgnoreCase("delete")) {
                         if (!args[1].equalsIgnoreCase("world")) {
                             final World w = Bukkit.getWorld(args[1]);
                             if (w != null) {
@@ -138,7 +137,7 @@ public class cmdWorld implements CommandExecutor{
                         }
                     }
              //加载世界
-            if (args.length == 2 &&args[0].equalsIgnoreCase("import")) {
+            if (args.length == 2 && args[0].equalsIgnoreCase("import")) {
                 try {
                     final World w = Bukkit.getWorld(args[1]);
                     p.teleport(w.getSpawnLocation());
@@ -158,7 +157,7 @@ public class cmdWorld implements CommandExecutor{
                 }
             }
             //卸载世界
-            if (args.length == 2 &&args[0].equalsIgnoreCase("unload")) {
+            if (args.length == 2 && args[0].equalsIgnoreCase("unload")) {
                 if (Bukkit.getWorld(args[1]) != null) {
                     return true;
                 }
@@ -171,24 +170,17 @@ public class cmdWorld implements CommandExecutor{
                 Config.removeWorld(args[1]);
                 p.sendMessage(Main.prefix + "§c卸载成功");
             }
-            //添加世界介绍
-            if (args.length == 2 &&args[0].equalsIgnoreCase("addinfo")) {
-                final World w = Bukkit.getWorld(args[1]);
-                if (w != null) {
-                    worldNotExists(p, args[1]);
-                    return true;
-                }
-                p.sendMessage(Main.prefix + "您现在正在编辑世界的信息 §b§l" + w.getName() + "§7.");
-                p.sendMessage(Main.prefix + "现在在聊天中写下地图信息.");
-                ClickEvent.changeInfo = args[1];
-                cmdWorld.worldInfo.add(p);
+            //设置世界介绍
+            if (args.length == 2 && args[0].equalsIgnoreCase("addinfo")) {
+                World w = p.getWorld();
+                Config.addInfo(w.getName(), args[1]);
+                p.sendMessage(Main.prefix  + "已添加信息§b " + args[1] + "§7 到配置文件.");
             }
-
+            //设置世界中文名
             if (args.length == 2 && args[0].equalsIgnoreCase("setname")) {
                 String worldname = p.getWorld().getName();
-                String name = args[1];
-                Config.addname(worldname, name);
-                p.sendMessage(Main.prefix + "§c成功设置别名:"+name);
+                Config.addname(worldname, args[1]);
+                p.sendMessage(Main.prefix + "§c成功设置别名:"+ args[1]);
             }
         }
         return false;
