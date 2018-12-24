@@ -105,7 +105,7 @@ public class cmdWorld implements CommandExecutor{
                     worldNotExists(p,args[1]);
                     return true;
                 }
-                p.teleport(Bukkit.getWorld(args[1]).getSpawnLocation());
+                Config.getSpawn(args[1], p);
                 p.sendMessage(Main.prefix + "已传送到世界§6 " + args[1] + " §7的出生点.");
             }
             //删除世界
@@ -144,9 +144,8 @@ public class cmdWorld implements CommandExecutor{
                     if (loadWorld.exists()) {
                         p.sendMessage(Main.prefix + "加载世界中.");
                         final World w2 = Bukkit.createWorld(new WorldCreator(args[1]).type(WorldType.FLAT));
-                        p.teleport(w2.getSpawnLocation());
                         Config.addWorld(w2.getName());
-                        p.sendMessage(Main.prefix + "这个世界已被加载。已将你传送.");
+                        p.sendMessage(Main.prefix + "这个世界已被加载.");
                     } else {
                         p.sendMessage(Main.prefix + "找不到你要加载的世界文件.");
                     }
@@ -180,7 +179,7 @@ public class cmdWorld implements CommandExecutor{
             }
             //设置世界出生点
             if (args.length == 1 && args[0].equalsIgnoreCase("setspawn") && cs.isOp()) {
-                p.getWorld().setSpawnLocation(p.getLocation());
+                Config.addSpawn(p.getWorld().getName(), p);
                 p.sendMessage(Main.prefix + "§c成功设置");
             }
         }
@@ -199,8 +198,7 @@ public class cmdWorld implements CommandExecutor{
                         target1.sendMessage(Main.prefix + "这个世界<"+ args[2] +">不存在!传送失败!请联系管理员!");
                         return true;
                     }
-                    target1.teleport(world.getSpawnLocation());
-                    target1.sendMessage(Main.prefix + "已传送到世界§6 " + world.getName() + " §7的出生点.");
+                    Config.getSpawn(args[2], target1);
                 }
             }
         }

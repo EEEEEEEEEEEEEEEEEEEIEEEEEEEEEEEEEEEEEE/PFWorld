@@ -64,7 +64,7 @@ public class ClickEvent implements Listener{
                     final String toSplit = event.getCurrentItem().getItemMeta().getDisplayName();
                     final String[] splitted = toSplit.split("6");
                     if (Bukkit.getWorld(splitted[1]) != null) {
-                        p.teleport(Bukkit.getWorld(splitted[1]).getSpawnLocation());
+                        Config.getSpawn(splitted[1], p);
                     }
                     else {
                         cmdWorld.worldNotExists(p, splitted[1]);

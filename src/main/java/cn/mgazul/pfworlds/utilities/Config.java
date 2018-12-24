@@ -1,11 +1,9 @@
 package cn.mgazul.pfworlds.utilities;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,6 +144,55 @@ public class Config
                 catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    public static void addSpawn(String w, Player player) {
+        World world = Bukkit.getWorld(w);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+        if (Config.f.exists()) {
+            try {
+                cfg.load(Config.f);
+                if (cfg.getString("worlds." + world.getName()) != null) {
+                    cfg.set("worlds." + world.getName() + ".spawn.x", player.getLocation().getX());
+                    cfg.set("worlds." + world.getName() + ".spawn.y", player.getLocation().getY());
+                    cfg.set("worlds." + world.getName() + ".spawn.z", player.getLocation().getZ());
+                    cfg.set("worlds." + world.getName() + ".spawn.yaw", player.getLocation().getYaw());
+                    cfg.set("worlds." + world.getName() + ".spawn.pitch", player.getLocation().getPitch());
+                }
+                cfg.save(Config.f);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void getSpawn(String w, Player player) {
+        World world = Bukkit.getWorld(w);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(f);
+        double x;
+        double y;
+        double z;
+        int yaw;
+        int pitch;
+        if (f.exists()) {
+            try {
+                cfg.load(f);
+                if (cfg.getString("worlds." + world.getName()) != null) {
+                    x = cfg.getDouble("worlds." + world.getName() + ".spawn.x");
+                    y = cfg.getDouble("worlds." + world.getName() + ".spawn.y");
+                    z = cfg.getDouble("worlds." + world.getName() + ".spawn.z");
+                    yaw = cfg.getInt("worlds." + world.getName() + ".spawn.yaw");
+                    pitch = cfg.getInt("worlds." + world.getName() + ".spawn.pitch");
+                    player.teleport(new Location(world, x, y, z, yaw, pitch));
+                } else {
+                    player.teleport(world.getSpawnLocation());
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
