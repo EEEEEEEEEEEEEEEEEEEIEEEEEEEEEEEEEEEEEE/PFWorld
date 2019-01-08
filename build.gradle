@@ -8,7 +8,7 @@ targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 
 dependencies {
-    compile files('lib/spigot-1.13.2.jar')
+    compile files('lib/spigot-1.12.2.jar')
     compile files('lib/PlaceholderAPI-2.9.2.jar')
 }
 
