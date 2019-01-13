@@ -48,7 +48,7 @@ public class cmdWorld implements CommandExecutor{
                         infos = "§7-/-";
                         name1 = w.getName().toString();
                     }
-                    infoLore.add("§b世界别名 §8》 §7" + name1);
+                    infoLore.add("§b世界别名 §8》 §7" + name1.replace("&", "§"));
                     infoLore.add("§b信息 §8》 §7" + infos.replace("&", "§"));
                     infoLore.add("§b世界边界 §8》 §7" + String.valueOf(w.getWorldBorder().getSize()));
                     infoLore.add("§b世界类型 §8》 §7" + worldtype);
@@ -175,7 +175,7 @@ public class cmdWorld implements CommandExecutor{
             if (args.length == 2 && args[0].equalsIgnoreCase("setname") && cs.isOp()) {
                 String worldname = p.getWorld().getName();
                 Config.addname(worldname, args[1]);
-                p.sendMessage(Main.prefix + "§c成功设置别名:"+ args[1]);
+                p.sendMessage(Main.prefix + "§c成功设置别名:"+ args[1].replace("&", "§"));
             }
             //设置世界出生点
             if (args.length == 1 && args[0].equalsIgnoreCase("setspawn") && cs.isOp()) {
