@@ -18,7 +18,7 @@ public class PFPapiHook extends PlaceholderHook{
     	if(p == null){
     	 	return null;
     	}
-        if (i.equalsIgnoreCase("worldname")) {
+        if (i.equalsIgnoreCase("name")) {
         	World w = p.getWorld();
         	String worldname = w.getName();
             try {
