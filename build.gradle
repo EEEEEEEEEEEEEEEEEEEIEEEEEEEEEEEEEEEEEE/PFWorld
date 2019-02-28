@@ -1,5 +1,14 @@
 apply plugin: 'java'
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name = "papermc"
+        url = "https://papermc.io/repo/repository/maven-public"
+    }
+}
+
 group = pluginGroup
 version = pluginVersion
 
@@ -10,6 +19,7 @@ compileJava.options.encoding = 'UTF-8'
 dependencies {
     compile files('lib/spigot-1.13.2.jar')
     compile files('lib/PlaceholderAPI-2.9.2.jar')
+    compileOnly 'com.destroystokyo.paper:paper-api:1.13.2-R0.1-SNAPSHOT'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
