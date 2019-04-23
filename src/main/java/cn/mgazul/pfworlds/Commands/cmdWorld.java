@@ -2,9 +2,7 @@ package cn.mgazul.pfworlds.Commands;
 
 import cn.mgazul.pfworlds.Main;
 import cn.mgazul.pfworlds.utilities.Config;
-import cn.mgazul.pfworlds.utilities.WorldTypes;
 import cn.mgazul.pfworlds.utilities.itemAPI;
-import me.clip.placeholderapi.util.Msg;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,8 +11,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,7 +85,7 @@ public class cmdWorld implements CommandExecutor{
                     Main.instance.setCommandName(args[1]);
                     int i = -1;
                     final Inventory inv = Bukkit.createInventory(null, 27, "§7世界名§8: §c" + args[1]);
-                    for (WorldType worldType : WorldTypes.WorldTypes) {
+                    for (WorldType worldType : Main.WorldTypes) {
                         i++;
                         inv.setItem(i, itemAPI.doItem(Material.MAP, 1, worldType.getName(), null));
                     }

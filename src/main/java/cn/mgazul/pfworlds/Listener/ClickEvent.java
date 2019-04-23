@@ -3,7 +3,6 @@ package cn.mgazul.pfworlds.Listener;
 import cn.mgazul.pfworlds.Commands.cmdWorld;
 import cn.mgazul.pfworlds.Main;
 import cn.mgazul.pfworlds.utilities.Config;
-import cn.mgazul.pfworlds.utilities.WorldTypes;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,17 +11,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class ClickEvent implements Listener{
     static ClickEvent intsanz;
-    public static String changeInfo;
-    
-    static {
-        ClickEvent.changeInfo = "";
-    }
+    public static String changeInfo = "";
     
     public void createWorld(final InventoryClickEvent event, final Player p) {
         p.closeInventory();
         final WorldType worldType = WorldType.getByName(event.getCurrentItem().getItemMeta().getDisplayName());
         if (worldType != null) {
-            if (WorldTypes.WorldTypes.contains(worldType)) {
+            if (Main.WorldTypes.contains(worldType)) {
             	final World w = Bukkit.createWorld(new WorldCreator(Main.instance.getCommandName()).type(worldType));
                 p.teleport(Bukkit.getWorld(Main.instance.getCommandName()).getSpawnLocation());
                 try {
@@ -44,7 +39,7 @@ public class ClickEvent implements Listener{
         ClickEvent.intsanz = this;
         if (event.getWhoClicked() instanceof Player) {
             final Player p = (Player)event.getWhoClicked();
-            if (event.getInventory().getTitle().startsWith("§7世界名§8: ")) {
+            if (event.getView().getTitle().startsWith("§7世界名§8: ")) {
                 try {
                     if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.MAP) {
                         this.createWorld(event, p);
@@ -55,7 +50,7 @@ public class ClickEvent implements Listener{
                     p.sendMessage(Main.prefix  + "发生了未知错误. ");
                 }
             }
-            else if (event.getInventory().getTitle().equals("§8》 §6世界")) {
+            else if (event.getView().getTitle().equals("§8》 §6世界")) {
                 event.setCancelled(true);
                 if (event.getCurrentItem() == null) {    //如果点击的是null，则返回
                     return;

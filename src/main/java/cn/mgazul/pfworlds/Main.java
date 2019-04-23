@@ -4,23 +4,25 @@ import cn.mgazul.pfworlds.Commands.cmdWorld;
 import cn.mgazul.pfworlds.Listener.ClickEvent;
 import cn.mgazul.pfworlds.utilities.Config;
 import cn.mgazul.pfworlds.utilities.PFPapiHook;
-import cn.mgazul.pfworlds.utilities.WorldTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+
 public class Main extends JavaPlugin{
 
     public static Main instance;
     public static String prefix = "§6世界管理 §8》 §7";
+    public static ArrayList<WorldType> WorldTypes = new ArrayList<WorldType>();
 
     public String type;
     
     public void addWorldType() {
-        WorldTypes.WorldTypes.add(WorldType.FLAT);
-        WorldTypes.WorldTypes.add(WorldType.NORMAL);
-        WorldTypes.WorldTypes.add(WorldType.LARGE_BIOMES);
+        WorldTypes.add(WorldType.FLAT);
+        WorldTypes.add(WorldType.NORMAL);
+        WorldTypes.add(WorldType.LARGE_BIOMES);
     }
     
     public String getCommandName() {
