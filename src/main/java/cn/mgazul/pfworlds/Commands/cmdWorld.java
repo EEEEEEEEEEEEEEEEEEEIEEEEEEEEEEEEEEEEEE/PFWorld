@@ -20,17 +20,17 @@ public class cmdWorld implements CommandExecutor{
     public static File f = new File("plugins/PFWorlds/worlds.yml");
     
     
-    public static void openWorldGui(final Player p, final String name) {
+    public static void openWorldGui(Player p, String name) {
         int groesse = 54;
         int pos = 0;
         while (Bukkit.getWorlds().size() > groesse) {
             groesse += 54;
         }
-        final Inventory inv = Bukkit.createInventory(null, groesse, name);
-        for (final World w : Bukkit.getWorlds()) {
-            final ArrayList<String> infoLore = new ArrayList<String>();
+        Inventory inv = Bukkit.createInventory(null, groesse, name);
+        for (World w : Bukkit.getWorlds()) {
+            ArrayList<String> infoLore = new ArrayList<String>();
             try {
-                final FileConfiguration cfg = YamlConfiguration.loadConfiguration(cmdWorld.f);
+                FileConfiguration cfg = YamlConfiguration.loadConfiguration(cmdWorld.f);
                 cfg.load(cmdWorld.f);
                 if (cfg.getConfigurationSection("worlds.") != null && cmdWorld.f.exists()) {
                     String worldtype = "N/A";
@@ -61,15 +61,15 @@ public class cmdWorld implements CommandExecutor{
         p.openInventory(inv);
     }
     
-    public static void worldNotExists(final Player p, String world) {
+    public static void worldNotExists(Player p, String world) {
         p.sendMessage(Main.prefix + "这个世界<"+ world +">不存在。 可以通过§6/world list§7看到现有的世界!");
     }
 
-    public static void worldAllExists(final Player p, String world) {
+    public static void worldAllExists(Player p, String world) {
         p.sendMessage(Main.prefix + "这个世界<"+ world +">已存在。 可以通过§6/world list§7看到现有的世界!");
     }
     
-    public boolean onCommand(final CommandSender cs, final Command cmd, final String label, final String[] args) {
+    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         if (cs instanceof Player) {
             Player p = (Player)cs;
             if (args.length == 0 && cs.isOp()) {
@@ -84,7 +84,7 @@ public class cmdWorld implements CommandExecutor{
                 if (Bukkit.getWorld(args[1]) == null) {
                     Main.instance.setCommandName(args[1]);
                     int i = -1;
-                    final Inventory inv = Bukkit.createInventory(null, 27, "§7世界名§8: §c" + args[1]);
+                    Inventory inv = Bukkit.createInventory(null, 27, "§7世界名§8: §c" + args[1]);
                     for (WorldType worldType : Main.WorldTypes) {
                         i++;
                         inv.setItem(i, itemAPI.doItem(Material.MAP, 1, worldType.getName(), null));
@@ -107,9 +107,9 @@ public class cmdWorld implements CommandExecutor{
             //删除世界
             if (args.length == 2 && args[0].equalsIgnoreCase("delete") && cs.isOp()) {
                         if (!args[1].equalsIgnoreCase("world")) {
-                            final World w = Bukkit.getWorld(args[1]);
+                            World w = Bukkit.getWorld(args[1]);
                             if (w != null) {
-                                for (final Player all : Bukkit.getOnlinePlayers()) {
+                                for (Player all : Bukkit.getOnlinePlayers()) {
                                     if (all.getWorld() == w) {
                                         all.teleport(Bukkit.getWorld("world").getSpawnLocation());
                                     }
@@ -117,7 +117,7 @@ public class cmdWorld implements CommandExecutor{
                             }
                             try {
                                 Bukkit.unloadWorld(w, true);
-                                final File deleteWorld = w.getWorldFolder();
+                                File deleteWorld = w.getWorldFolder();
                                 deleteWorld.delete();
                                 p.sendMessage(Main.prefix + "世界被成功删除.");
                                 Config.removeWorld(args[1]);
@@ -132,14 +132,14 @@ public class cmdWorld implements CommandExecutor{
              //加载世界
             if (args.length == 2 && args[0].equalsIgnoreCase("import") && cs.isOp()) {
                 try {
-                    final World w = Bukkit.getWorld(args[1]);
+                    World w = Bukkit.getWorld(args[1]);
                     p.teleport(w.getSpawnLocation());
                     p.sendMessage(Main.prefix + "这个世界已经存在。 已将你传送.");
                 } catch (Exception e3) {
-                    final File loadWorld = new File(args[1]);
+                    File loadWorld = new File(args[1]);
                     if (loadWorld.exists()) {
                         p.sendMessage(Main.prefix + "加载世界中.");
-                        final World w2 = Bukkit.createWorld(new WorldCreator(args[1]).type(WorldType.FLAT));
+                        World w2 = Bukkit.createWorld(new WorldCreator(args[1]).type(WorldType.FLAT));
                         Config.addWorld(w2.getName());
                         p.sendMessage(Main.prefix + "这个世界已被加载.");
                     } else {
@@ -152,7 +152,7 @@ public class cmdWorld implements CommandExecutor{
                 if (Bukkit.getWorld(args[1]) != null) {
                     return true;
                 }
-                for (final Player all2 : Bukkit.getOnlinePlayers()) {
+                for (Player all2 : Bukkit.getOnlinePlayers()) {
                     if (all2.getWorld() == Bukkit.getWorld(args[1])) {
                         all2.teleport(Bukkit.getWorld("world").getSpawnLocation());
                     }
@@ -201,7 +201,7 @@ public class cmdWorld implements CommandExecutor{
         return false;
     }
     
-    private void sendHelp(final Player p) {
+    private void sendHelp(Player p) {
         p.sendMessage(Main.prefix + "/world create <Name> [WorldType] 创建世界");
         p.sendMessage(Main.prefix + "/world delete <Name> 删除世界");
         p.sendMessage(Main.prefix + "/world tp <Name> 传送世界");
