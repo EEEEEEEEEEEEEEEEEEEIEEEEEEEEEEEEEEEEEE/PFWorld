@@ -13,12 +13,12 @@ public class ClickEvent implements Listener{
     static ClickEvent intsanz;
     public static String changeInfo = "";
     
-    public void createWorld(final InventoryClickEvent event, final Player p) {
+    public void createWorld(InventoryClickEvent event, Player p) {
         p.closeInventory();
-        final WorldType worldType = WorldType.getByName(event.getCurrentItem().getItemMeta().getDisplayName());
+        WorldType worldType = WorldType.getByName(event.getCurrentItem().getItemMeta().getDisplayName());
         if (worldType != null) {
             if (Main.WorldTypes.contains(worldType)) {
-            	final World w = Bukkit.createWorld(new WorldCreator(Main.instance.getCommandName()).type(worldType));
+            	World w = Bukkit.createWorld(new WorldCreator(Main.instance.getCommandName()).type(worldType));
                 p.teleport(Bukkit.getWorld(Main.instance.getCommandName()).getSpawnLocation());
                 try {
                     Config.addWorld(w.getName());
@@ -35,10 +35,10 @@ public class ClickEvent implements Listener{
     }
     
     @EventHandler
-    public void onInventoryClickEvent(final InventoryClickEvent event) {
+    public void onInventoryClickEvent(InventoryClickEvent event) {
         ClickEvent.intsanz = this;
         if (event.getWhoClicked() instanceof Player) {
-            final Player p = (Player)event.getWhoClicked();
+            Player p = (Player)event.getWhoClicked();
             if (event.getView().getTitle().startsWith("§7世界名§8: ")) {
                 try {
                     if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.MAP) {
@@ -56,8 +56,8 @@ public class ClickEvent implements Listener{
                     return;
               }
                 if (event.getCurrentItem().getItemMeta().getDisplayName().startsWith("§7》")) {
-                    final String toSplit = event.getCurrentItem().getItemMeta().getDisplayName();
-                    final String[] splitted = toSplit.split("6");
+                    String toSplit = event.getCurrentItem().getItemMeta().getDisplayName();
+                    String[] splitted = toSplit.split("6");
                     if (Bukkit.getWorld(splitted[1]) != null) {
                         Config.getSpawn(splitted[1], p);
                     }

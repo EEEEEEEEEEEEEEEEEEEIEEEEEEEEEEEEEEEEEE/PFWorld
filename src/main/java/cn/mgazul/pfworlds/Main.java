@@ -51,7 +51,9 @@ public class Main extends JavaPlugin{
     }
     
     public void onDisable() {
-  	  PFPapiHook.unhook();
+        if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            PFPapiHook.unhook();
+        }
     }
     
     public void registerEvents() {
