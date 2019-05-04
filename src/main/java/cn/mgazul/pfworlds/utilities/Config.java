@@ -138,8 +138,8 @@ public class Config
                     cfg.load(Config.f);
                     if (cfg.getString("worlds." + world.getName()) != null) {
                         cfg.set("worlds." + world.getName(), null);
+                        cfg.save(Config.f);
                     }
-                    cfg.save(Config.f);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -172,21 +172,16 @@ public class Config
     public static void getSpawn(String w, Player player) {
         World world = Bukkit.getWorld(w);
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(f);
-        double x;
-        double y;
-        double z;
-        int yaw;
-        int pitch;
         if (f.exists()) {
             try {
                 cfg.load(f);
                 if (cfg.getString("worlds." + world.getName()) != null) {
-                    x = cfg.getDouble("worlds." + world.getName() + ".spawn.x");
-                    y = cfg.getDouble("worlds." + world.getName() + ".spawn.y");
-                    z = cfg.getDouble("worlds." + world.getName() + ".spawn.z");
-                    yaw = cfg.getInt("worlds." + world.getName() + ".spawn.yaw");
-                    pitch = cfg.getInt("worlds." + world.getName() + ".spawn.pitch");
-                    player.teleport(new Location(world, x, y, z, yaw, pitch));
+                    double x = cfg.getDouble("worlds." + world.getName() + ".spawn.x");
+                    double y = cfg.getDouble("worlds." + world.getName() + ".spawn.y");
+                    double z = cfg.getDouble("worlds." + world.getName() + ".spawn.z");
+                    double yaw = cfg.getDouble("worlds." + world.getName() + ".spawn.yaw");
+                    double pitch = cfg.getDouble("worlds." + world.getName() + ".spawn.pitch");
+                    player.teleport(new Location(world, x, y, z, (float)yaw, (float)pitch));
                 } else {
                     player.teleport(world.getSpawnLocation());
                 }
