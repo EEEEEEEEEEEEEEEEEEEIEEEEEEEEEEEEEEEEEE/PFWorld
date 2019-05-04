@@ -16,9 +16,9 @@ public class Config
         Config.f = new File("plugins/PFWorlds/worlds.yml");
     }
     
-    public static void addInfo(final String w, final String info) {
-        final World world = Bukkit.getWorld(w);
-        final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+    public static void addInfo(String w, String info) {
+        World world = Bukkit.getWorld(w);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
         if (Config.f.exists()) {
             try {
                 cfg.load(Config.f);
@@ -33,9 +33,9 @@ public class Config
         }
     }
     
-    public static void addname(final String w, final String info) {
-        final World world = Bukkit.getWorld(w);
-        final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+    public static void addname(String w, String info) {
+        World world = Bukkit.getWorld(w);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
         if (Config.f.exists()) {
             try {
                 cfg.load(Config.f);
@@ -50,10 +50,10 @@ public class Config
         }
     }
     
-    public static void addWorld(final String w) {
+    public static void addWorld(String w) {
         if (Bukkit.getWorld(w) != null) {
-            final World world = Bukkit.getWorld(w);
-            final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+            World world = Bukkit.getWorld(w);
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
             if (Config.f.exists()) {
                 try {
                     cfg.load(Config.f);
@@ -76,8 +76,8 @@ public class Config
     public static void createFile() {
         try {
             if (!Config.f.exists()) {
-                final File file = new File("plugins/PFWorlds", "worlds.yml");
-                final FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+                File file = new File("plugins/PFWorlds", "worlds.yml");
+                FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
                 try {
                     cfg.save(file);
                 }
@@ -93,10 +93,10 @@ public class Config
     
     public static void loadWorlds() {
         try {
-            final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
             cfg.load(Config.f);
             if (cfg.getConfigurationSection("worlds.") != null) {
-                for (final String w : cfg.getConfigurationSection("worlds.").getKeys(false)) {
+                for (String w : cfg.getConfigurationSection("worlds.").getKeys(false)) {
                     if (Bukkit.getWorld(w) == null && Config.f.exists()) {
                         Long seed = -1L;
                         String environment = "-1";
@@ -129,17 +129,17 @@ public class Config
         }
     }
     
-    public static void removeWorld(final String w) {
+    public static void removeWorld(String w) {
         if (Bukkit.getWorld(w) != null) {
-            final World world = Bukkit.getWorld(w);
-            final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+            World world = Bukkit.getWorld(w);
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
             if (Config.f.exists()) {
                 try {
                     cfg.load(Config.f);
                     if (cfg.getString("worlds." + world.getName()) != null) {
                         cfg.set("worlds." + world.getName(), null);
+                        cfg.save(Config.f);
                     }
-                    cfg.save(Config.f);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -172,21 +172,16 @@ public class Config
     public static void getSpawn(String w, Player player) {
         World world = Bukkit.getWorld(w);
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(f);
-        double x;
-        double y;
-        double z;
-        int yaw;
-        int pitch;
         if (f.exists()) {
             try {
                 cfg.load(f);
                 if (cfg.getString("worlds." + world.getName()) != null) {
-                    x = cfg.getDouble("worlds." + world.getName() + ".spawn.x");
-                    y = cfg.getDouble("worlds." + world.getName() + ".spawn.y");
-                    z = cfg.getDouble("worlds." + world.getName() + ".spawn.z");
-                    yaw = cfg.getInt("worlds." + world.getName() + ".spawn.yaw");
-                    pitch = cfg.getInt("worlds." + world.getName() + ".spawn.pitch");
-                    player.teleport(new Location(world, x, y, z, yaw, pitch));
+                    double x = cfg.getDouble("worlds." + world.getName() + ".spawn.x");
+                    double y = cfg.getDouble("worlds." + world.getName() + ".spawn.y");
+                    double z = cfg.getDouble("worlds." + world.getName() + ".spawn.z");
+                    double yaw = cfg.getDouble("worlds." + world.getName() + ".spawn.yaw");
+                    double pitch = cfg.getDouble("worlds." + world.getName() + ".spawn.pitch");
+                    player.teleport(new Location(world, x, y, z, (float)yaw, (float)pitch));
                 } else {
                     player.teleport(world.getSpawnLocation());
                 }
