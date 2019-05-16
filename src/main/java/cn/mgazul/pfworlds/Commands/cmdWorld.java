@@ -189,7 +189,7 @@ public class cmdWorld implements CommandExecutor{
         }
         //传送到世界 Player <控制台和命令方块可用>
         if (args.length == 3 && args[0].equalsIgnoreCase("tp") && cs.isOp()) {
-            for(OfflinePlayer target : Bukkit.getOfflinePlayers()) {
+            for(Player target : Bukkit.getOnlinePlayers()) {
                 String name = target.getName();
                 String argsname = args[1];
                 if(name == null ) {
