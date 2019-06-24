@@ -9,6 +9,7 @@ import org.bukkit.WorldType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Main extends JavaPlugin{
@@ -22,6 +23,7 @@ public class Main extends JavaPlugin{
     public void addWorldType() {
         WorldTypes.add(WorldType.FLAT);
         WorldTypes.add(WorldType.NORMAL);
+        WorldTypes.add(WorldType.AMPLIFIED);
         WorldTypes.add(WorldType.LARGE_BIOMES);
     }
     
@@ -33,7 +35,8 @@ public class Main extends JavaPlugin{
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
     }
-    
+
+    @Override
     public void onEnable() {
         this.registerEvents();
         loadConfig();
@@ -50,6 +53,7 @@ public class Main extends JavaPlugin{
         } 
     }
     
+    @Override
     public void onDisable() {
         if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             PFPapiHook.unhook();
@@ -64,5 +68,29 @@ public class Main extends JavaPlugin{
     
     public void setCommandName(String type) {
         this.type = type;
+    }
+
+    public static void deleteDir(File path) {
+        if (path.exists()) {
+            File[] allContents = path.listFiles();
+            if (allContents != null) {
+                File[] array;
+                for (int length = (array = allContents).length, i = 0; i < length; ++i) {
+                    File file = array[i];
+                    deleteDir(file);
+                }
+            }
+            path.delete();
+        }
+    }
+
+    public static boolean isInteger(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        }
+        catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

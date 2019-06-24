@@ -16,9 +16,9 @@ public class Config
         Config.f = new File("plugins/PFWorlds/worlds.yml");
     }
     
-    public static void addInfo(final String w, final String info) {
-        final World world = Bukkit.getWorld(w);
-        final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+    public static void addInfo(String w, String info) {
+        World world = Bukkit.getWorld(w);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
         if (Config.f.exists()) {
             try {
                 cfg.load(Config.f);
@@ -33,9 +33,9 @@ public class Config
         }
     }
     
-    public static void addname(final String w, final String info) {
-        final World world = Bukkit.getWorld(w);
-        final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+    public static void addname(String w, String info) {
+        World world = Bukkit.getWorld(w);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
         if (Config.f.exists()) {
             try {
                 cfg.load(Config.f);
@@ -49,11 +49,28 @@ public class Config
             }
         }
     }
+
+    public static void setnandu(Player player, String nandu) {
+        World world = player.getWorld();
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+        if (Config.f.exists()) {
+            try {
+                cfg.load(Config.f);
+                if (cfg.getString("worlds." + world.getName()) != null) {
+                    cfg.set("worlds." + world.getName() + ".difficulty", nandu);
+                }
+                cfg.save(Config.f);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
-    public static void addWorld(final String w) {
+    public static void addWorld(String w) {
         if (Bukkit.getWorld(w) != null) {
-            final World world = Bukkit.getWorld(w);
-            final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+            World world = Bukkit.getWorld(w);
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
             if (Config.f.exists()) {
                 try {
                     cfg.load(Config.f);
@@ -61,8 +78,9 @@ public class Config
                         cfg.set("worlds." + world.getName() + ".seed", world.getSeed());
                         cfg.set("worlds." + world.getName() + ".worldtype", world.getWorldType().name());
                         cfg.set("worlds." + world.getName() + ".environment", world.getEnvironment().name());
-                        cfg.set("worlds." + world.getName() + ".name",world.getName().toString());
+                        cfg.set("worlds." + world.getName() + ".name",world.getName());
                         cfg.set("worlds." + world.getName() + ".info","-/-");
+                        cfg.set("worlds." + world.getName() + ".difficulty", "EASY");
                     }
                     cfg.save(Config.f);
                 }
@@ -76,8 +94,8 @@ public class Config
     public static void createFile() {
         try {
             if (!Config.f.exists()) {
-                final File file = new File("plugins/PFWorlds", "worlds.yml");
-                final FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+                File file = new File("plugins/PFWorlds", "worlds.yml");
+                FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
                 try {
                     cfg.save(file);
                 }
@@ -93,14 +111,15 @@ public class Config
     
     public static void loadWorlds() {
         try {
-            final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
             cfg.load(Config.f);
             if (cfg.getConfigurationSection("worlds.") != null) {
-                for (final String w : cfg.getConfigurationSection("worlds.").getKeys(false)) {
+                for (String w : cfg.getConfigurationSection("worlds.").getKeys(false)) {
                     if (Bukkit.getWorld(w) == null && Config.f.exists()) {
                         Long seed = -1L;
                         String environment = "-1";
-                        String worldtype = "-1";
+                        String worldtype = "NORMAL";
+                        String difficulty = "EASY";
                         if (cfg.get("worlds." + w + ".seed") != null) {
                             seed = cfg.getLong("worlds." + w + ".seed");
                         }
@@ -117,9 +136,15 @@ public class Config
                             worldtype = cfg.getString("worlds." + w + ".worldtype");
                         }
                         else {
-                            worldtype = "-1";
+                            worldtype = "NORMAL";
                         }
-                        new WorldCreator(w).seed(seed).type(WorldType.valueOf(worldtype)).environment(World.Environment.valueOf(environment)).createWorld();
+                        if (cfg.get("worlds." + w + ".difficulty") != null) {
+                            difficulty = cfg.getString("worlds." + w + ".difficulty");
+                        }
+                        else {
+                            difficulty = "EASY";
+                        }
+                        new WorldCreator(w).seed(seed).type(WorldType.valueOf(worldtype)).environment(World.Environment.valueOf(environment)).createWorld().setDifficulty(Difficulty.valueOf(difficulty));
                     }
                 }
             }
@@ -129,10 +154,10 @@ public class Config
         }
     }
     
-    public static void removeWorld(final String w) {
+    public static void removeWorld(String w) {
         if (Bukkit.getWorld(w) != null) {
-            final World world = Bukkit.getWorld(w);
-            final FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
+            World world = Bukkit.getWorld(w);
+            FileConfiguration cfg = YamlConfiguration.loadConfiguration(Config.f);
             if (Config.f.exists()) {
                 try {
                     cfg.load(Config.f);

@@ -36,18 +36,22 @@ public class cmdWorld implements CommandExecutor{
                     String worldtype = "N/A";
                     String infos;
                     String name1;
+                    String difficulty;
                     if (cfg.get("worlds." + w.getName() + ".info") != null) {
                         infos = cfg.getString("worlds." + w.getName() + ".info");
                         worldtype = cfg.getString("worlds." + w.getName() + ".worldtype");
                         name1 = cfg.getString("worlds." + w.getName() + ".name");
+                        difficulty = cfg.getString( "worlds." + w.getName() + ".difficulty");
                     } else {
                         infos = "§7-/-";
-                        name1 = w.getName().toString();
+                        name1 = w.getName();
+                        difficulty = w.getDifficulty().name();
                     }
                     infoLore.add("§b世界别名 §8》 §7" + name1.replace("&", "§"));
                     infoLore.add("§b信息 §8》 §7" + infos.replace("&", "§"));
                     infoLore.add("§b世界边界 §8》 §7" + String.valueOf(w.getWorldBorder().getSize()));
                     infoLore.add("§b世界类型 §8》 §7" + worldtype);
+                    infoLore.add("§b世界难度 §8》 §7" + difficulty);
                 }
             }
             catch (Exception e) {
@@ -69,6 +73,7 @@ public class cmdWorld implements CommandExecutor{
         p.sendMessage(Main.prefix + "这个世界<"+ world +">已存在。 可以通过§6/world list§7看到现有的世界!");
     }
     
+    @Override
     public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
         if (cs instanceof Player) {
             Player p = (Player)cs;
@@ -118,7 +123,7 @@ public class cmdWorld implements CommandExecutor{
                             try {
                                 Bukkit.unloadWorld(w, true);
                                 File deleteWorld = w.getWorldFolder();
-                                deleteWorld.delete();
+                                Main.deleteDir(deleteWorld);
                                 p.sendMessage(Main.prefix + "世界被成功删除.");
                                 Config.removeWorld(args[1]);
                             }
@@ -182,6 +187,40 @@ public class cmdWorld implements CommandExecutor{
                 Config.addSpawn(p.getWorld().getName(), p);
                 p.sendMessage(Main.prefix + "§c成功设置");
             }
+            //设置世界难度
+            if (args.length == 2 && args[0].equalsIgnoreCase("difficulty") && cs.isOp()) {
+                if (Main.isInteger(args[1])) {
+                    int nandu = Integer.valueOf(args[1]);
+                    if (nandu >= 0 && nandu < 4) {
+                        if (nandu == 0) {
+                            p.getWorld().setDifficulty(Difficulty.PEACEFUL);
+                            Config.setnandu(p, "PEACEFUL");
+                            p.sendMessage(Main.prefix + "§a成功设置难度为和平!");
+                        }
+                        else if (nandu == 1) {
+                            p.getWorld().setDifficulty(Difficulty.EASY);
+                            Config.setnandu(p, "EASY");
+                            p.sendMessage(Main.prefix + "§a成功设置难度为简单!");
+                        }
+                        else if (nandu == 2) {
+                            p.getWorld().setDifficulty(Difficulty.NORMAL);
+                            Config.setnandu(p, "NORMAL");
+                            p.sendMessage(Main.prefix + "§a成功设置难度为普通!");
+                        }
+                        else if (nandu == 3) {
+                            p.getWorld().setDifficulty(Difficulty.HARD);
+                            Config.setnandu(p, "HARD");
+                            p.sendMessage(Main.prefix + "§a成功设置难度为困难!");
+                        }
+                    }
+                    else{
+                        p.sendMessage(Main.prefix + "§c成功失败，请输入数字0-3!");
+                    }
+                }
+                else{
+                    p.sendMessage(Main.prefix + "§c成功失败，请输入数字0-3!");
+                }
+            }
         }
         //传送到世界 Player <控制台和命令方块可用>
         if (args.length == 3 && args[0].equalsIgnoreCase("tp") && cs.isOp()) {
@@ -218,6 +257,7 @@ public class cmdWorld implements CommandExecutor{
         p.sendMessage(Main.prefix + "/world setname <Name> 设置当前世界别名");
         p.sendMessage(Main.prefix + "/world setspawn 设置世界出生点");
         p.sendMessage(Main.prefix + "/world list  世界列表GUI");
+        p.sendMessage(Main.prefix + "/world difficulty <0-3>  设置当前世界难度");
         p.sendMessage(" ");
     }
 }
